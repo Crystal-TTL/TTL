@@ -1,0 +1,26 @@
+[tokio]
+threads = '$TOKIO_THREADS'
+
+[handle]
+active = '$HANDLE_ACTIVE'
+mode = '$HANDLE_MODE'
+secret = "$WALLET_SECRET"
+
+connection_string = '$HANDLE_POSTGRES_CONNECTION_STRING'
+pool_min = '$HANDLE_POSTGRES_POOL_MIN'
+pool_max = '$HANDLE_POSTGRES_POOL_MAX'
+timeout_acquire_ms = '$HANDLE_POSTGRES_TIMEOUT_ACQUIRE_MS'
+
+rpc_url = '$HANDLE_RPC_URL'
+
+[rule_pumpfun]
+active = '$RULE_PUMPFUN_ACTIVE'
+
+[rule_pumpup]
+active = '$RULE_PUMPUP_ACTIVE'
+
+[rule]
+connection_string = '$RULE_POSTGRES_CONNECTION_STRING'
+pool_min = '$RULE_POSTGRES_POOL_MIN'
+pool_max = '$RULE_POSTGRES_POOL_MAX'
+timeout_acquire_ms = '$RULE_POSTGRES_TIMEOUT_ACQUIRE_MS'

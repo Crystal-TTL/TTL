@@ -1,0 +1,290 @@
+// Copyright (c) nyanbot.com 2025.
+// This file is licensed under the AGPL-3.0-or-later.
+
+use crate::solana::block::setup;
+use base::assert_sql;
+use base::model::solana::Slot;
+use base::testing::run_test_with_pool_on_empty_db;
+use indexer::solana::block::index_block;
+use solana::convert::convert_block;
+use sqlx::Executor;
+
+#[test_log::test(sqlx::test)]
+async fn test_ok() {
+    // caused the indexer to panic
+    run_test_with_pool_on_empty_db(|pool| async move {
+		let block = serde_json::from_str(include_str!("./block_334886841.json")).unwrap();
+		let block = convert_block(Slot::from(334886841), block)
+			.await
+			.unwrap()
+			.unwrap();
+
+		let mut tx = pool.begin().await.unwrap();
+		tx.execute(
+			r#"
+insert into solana.address (id, address, created_at, updated_at)
+values  (1, '9EJDEgnurpg43YBZErV38CPDsBN22mCwKAEdKn8mUjSr', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (2, 'G2Ewfnr5S5GqUNRdopeAqAE4eaNPsBLbJ9vFATcvGLVq', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (3, '3kAkyZn6R9TU3PwuAwySaP2Usv2eeFnDvVUkXGgeu34o', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (4, '5ktP2iJ36WcrcBMXU3YuwHqq1fwi1k253gm2ntRCy6jA', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (5, '6fBaSF1LmBgArEANxy9X9ZPkAQ5dGdUXqM5Zmt3CDYns', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (6, 'GJxDr6C44QkpJG53GnYmsjrdXhzRZFUpxTXf9zA5NWkq', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (7, 'HznCzyBU5k1jiA64DXCQquVeu69MZtrNcDbzh2g2d3vw', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (8, 'DAY8N1jQsbKCSpxUtF7Fvya8pt1NXarXeocaS4UYpEAU', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (9, 'CkUZV387xnoGpF7wC2moMa6mPmAgCvTT4pWgzq4M9fCD', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (10, 'EHm2iUYXKRu8R3en7ZoStpAcgQAz7Jt1HA21bQAbqzeQ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (11, 'G5NPSG2fqLcuLJbo6bD6EJmBS7m4HE375Z2X2wEbgTZR', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (12, 'DsEq195QuQkW9JpPKHtTeiUDeCsL21JJkv1fPB9VPrhv', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (13, 'GGztQqQ6pCPaJQnNpXBgELr5cs3WwDakRbh1iEMzjgSJ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (14, 'ASfdqSYuoY3NFNprdmPYBj8wqcnxGmhfyzXKrmyfC4vE', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (15, '4tRvF7AM1mpMWEiJNS895aZY86YmDnVbNJxxsQWhw8rK', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (16, 'BBnFRcEuKHawcJKbXa9f7HKZ1GNJcjpLt46Pc87nTF9z', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (17, '3qppiaLwzwJzhkarbByj3GXN6iEyB2fVhtnXxpfWaS5U', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (18, '6U91aKa8pmMxkJwBCfPTmUEfZi6dHe7DcFq2ALvB2tbB', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (19, '8D1wvyFQup3DfvGQf9Tpiwk8Udqio6Dfetdh3Ndmw2KE', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (20, '2oDbTC2HkKHEe5PnvzJCLscf8nHnemoMG3BkRK6GZyzt', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (21, '8PC9iapZYubEWVe9KbL7DG7PHRWUy5nU6oBanmSePSCE', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (22, '4xn9XkuA5kfwYnRaEb5zNkC4NLJnZLux1LQ1z8EhQ6gP', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (23, '6X7wPaPNCTUQaeEXWHLeeWJZ5a5QvianSwF8Ew3MLfMM', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (24, 'DNHCccj9emBw1oxsCrtGdkZ9DEUXvcaGS5Gt2qgES1Ce', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (25, 'AJwcfvLMdrBDnH3LumXuuz3bxuAwiNUPodzzuA11bDTK', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (26, '3iqgybhGRD3pvwrPRbBkeZRpvkeHEJU4rqGADML4p8pD', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (27, '8J4U52NiromWyNJqq5oRmS8ckQ1kuEhzZa25VHxCtHjv', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (28, 'B9k3YTEhN2gVw8Wk91PxAoeMCU6mJkryV8aCPKrERM8o', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (29, 'D9Jx4jRf3TiDCbAKGSDjWrYTxSHWncbymbxrN4q88R8p', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (30, '8HzU4y7tk4DK6FDExmjNZHhFEYTkygykjoF7muiGeAuT', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (31, '9SRHksL78Ni2doPzCcokcRvkd82w8eaGGAhQu1vF65be', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (32, 'GseMAnNDvntR5uFePZ51yZBXzNSn7GdFPkfHwfr6d77J', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (33, '9XDYTfQKwW8sHPqnFdUreMmtmffmkHVPGTNV2e3LKxNW', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (34, 'FhG7BSSNpVexfU8c4iyXCbt55tAH424nDTAirYDzSwXs', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (35, '7Nz6LLTURemXuXoAjshwXX9NEf9QcKbabM47w8rgJKrZ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (36, '4w2cysotX6czaUGmmWg13hDpY4QEMG2CzeKYEQyK9Ama', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (37, 'F2hTQygjZr7FmKgjAjmMu3Vjq8BTQaNgo9fKtSaBWjxF', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (38, '44QsoBYaFBdhXpLY3iDVUZr13dgVGsABvc3MaRLhGJXU', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (39, '5AgcjRRunoafn6WCwzhYAvhWpKYRwdMr8uh7W3YXkPc4', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (40, '6NUw35UZJieJ7UFWjvL4rq6F1AaJo9M3cKYpL7zkRzPe', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (41, 'BEMnxcqdmHYPj2XuMt9m5byiP2b5NQfoocHxfNybboXz', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (42, 'J3JeorQjFNLpP1Te1shKDs2CGnqVma1iaxJxPKUaCxKh', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (43, '2LggeJGUygkKQxBJKJv7udux9zKpGxhWLnYLAzpt9nWg', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (44, 'FZKWX2E3WtmXL6Y2n8bYn6G1nxuxn5C7aXm8N431LUPZ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (45, '6t2FQQKkXf6ZqU5xTsGDp1dKKZWBJXa3git7xRZv2CBy', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (46, '3CRkBcZNcC27qsAC7qxn2zXK2N9NgK8Zc96R43cn7L56', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (47, 'DbkHc7rur1BJpB4m4m1ChNActmuXw5Dp9hANarNuF4h5', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (48, '3j4Mck4CbQ2EpHrM6K2xCpxPqeHYF9Hk5LLS6FJ5MyeY', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (49, 'F2rC8o4HareRomedLj5WCnaEWJvASVg8M5WYUFN9gRco', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (50, 'J5d8yj8wXtE3t1Z94PtfVLqnPzTa2TZQWgr12VAe64VR', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (51, 'HmeadSP3B9Yy1wf6sgyCQHvQ8tKSwDPrV1XLAhpp8j4o', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (52, '8bzskRH3rDhbwypkswBT2Rtnxkof1LBGSDsZemFozsoS', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (53, 'Fgy5qootz5V6JPpJE3dPk4pA5kdZqA2LxUkoG5gtVsBz', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (54, 'GAyxg9ZA2eeJVuwzMfhQFwQUf5PEf1n4ij4TcwyZE4V2', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (55, 'CPN94KcRTQxkyF98toKWSUS3pCQm71CCJ3GjfJJekfk8', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (56, '134Yy1wkG2pvxCVHjq81xmwCecfupVLVDShf2BqsRH2E', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (57, 'GD33MmpHG2EjMFB9RXN6nLkFgCDvewaJEoufsysVwHBd', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (58, '4xf6iC1JjNePFMZ9G3iDbWLtMVjbURqDybGJkFixQY1', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (59, 'CiHhYqSBRLCxq7HQzpyTswju2sZ6AEekBogdMSCnSSYc', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (60, 'F5aYCDTnMus2zKgfkudoxRkTCTpXf6hyygkyLzzQxGGU', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (61, '97CHZ8MRpQbhfHepw1aWEintqzd5c19VuquionS9vxn1', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (62, '6n35d5T2g6dCzprerXnFdaEtWSFpFfmsmPy5QyRrVovT', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (63, '12VFrc1dFynPzs4HBRdRoMKNm1jca2S2uhaNKCkdffwy', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (64, 'HhMLbYsgY8sHKYip1twrt1iErvitktUL96LHurJ34dm3', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (65, '2avyhnk8W9ALdJK9qqzc6QzobtnvXz8JvLj5h41V72Qs', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (66, '9osj5ksZcrYVeft5pjN1KUNpuM9xiZpjLPxtiMHG4AT5', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (67, 'AQSmXUrH4rXtiHWiKpb1dfzwM8og4UBWTYLgyAU5iMfn', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (68, 'C9PgoCGkrc9gBh54DKJgc9gUP9AAaZuZN9PTqD3dpYN1', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (69, '5S9yomCmUav6DRKybLN5FywLZrsLbx4rmVbe2cGqM7kW', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (70, 'BXsQoqGcRizLKGo7xnBisXXWUiNwx7DitobDrRn6And4', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (71, '29SEiUEjRbQF4k4eNRyEppDsk8RPHNw2XrRkgLHqzKRi', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (72, '5TMhjurG2Sd6EFLU7Ca5waR2esheMjUiNedDubCBRC1Y', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (73, 'CqHN8nrCV8FFHWRS3jZgg3E141pi2MHkcfEzDMbT8tY8', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (74, 'DuDyqQA1qAy5wWCAZyvzmSHbPEPF9qaSqiJRE7gby1Gi', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (75, 'EqXsktW9DB69EHzMZtajMbkcJoz6mE76aVnEHNbZ4bMQ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (76, 'A8CPFctdQjjNUvsPrtJcrN1JTwMpQ9VQ8GLGFUoGfLpE', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (77, 'bcwy5g3UP1p4iXiTHP9Gx3c9eqgzsXzKErbNHwXTYWQ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (78, '27Xgc3W7y8qJmZ4n3267G14kVYF8Kqk2DNtUgLDxyLnu', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (79, 'FWsW1xNtWscwNmKv6wVsU1iTzRN6wmmk3MjxRP5tT7hz', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (80, '45ruCyfdRkWpRNGEqWzjCiXRHkZs8WXCLQ67Pnpye7Hp', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (81, 'JCRGumoE9Qi5BBgULTgdgTLjSgkCMSbF62ZZfGs84JeU', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (82, '9yj3zvLS3fDMqi1F8zhkaWfq8TZpZWHe6cz1Sgt7djXf', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (83, '9rPYyANsfQZw3DnDmKE3YCQF5E8oD89UXoHn9JFEhJUz', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (84, 'Fsqdve9ZpwyvNhgFQWp6bgZYSLp1QuhCZyVhG9aamY7S', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (85, 'F1G4b2HJBfCiKPyvjnDaKNQ1VxwWGKH2yUWVFmEWtxdF', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (86, 'EM1GQEerfKsrT6eJbehX4nwV3MdTCdjvhUYVytFAuEVg', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (87, 'FkwK3QH53f8aRM9uegZbSZSJUcDyao9at1Lovd7JCKBb', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (88, 'G5UZAVbAf46s7cKWoyKu8kYTip9DGTpbLZ2qa9Aq69dP', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (89, '8psNvWTrdNTiVRNzAgsou9kETXNJm2SXZyaKuJraVRtf', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (90, '4xDsmeTWPNjgSVSS1VTfzFq3iHZhp77ffPkAmkZkdu71', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (91, 'FATVs4kXX4tq71Rk3RHiy8ecUDxCqV7UrwqFZiPqG5Qe', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (92, '5JrqsG8F8fGHWYq2hPGXbDZotNniTL8ub9rkyvwCXvx4', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (93, '81MPQqJY58rgT83sy99MkRHs2g3dyy6uWKHD24twV62F', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (94, '3AbG3ZA19fJKjTSTMTCz7j2bodPagXog4PwTBi8H7UA4', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (95, '96MURQLKqJsHnYc9avA9zWB6j6VuzLPWmMXvAsrb6BDm', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (96, 'EJtuJUyXuCoauNYQuh8ZCT1L2UKRnBHuT7YXfJj4B1uf', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (97, 'FERjPVNEa7Udq8CEv68h6tPL46Tq7ieE49HrE2wea3XT', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (98, '5hWJUNTtEtKmKgDXpthJXXRRmJrz5vJ7uJzrUNVdrwLg', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (99, 'ALfS4oPB5684XwTvCjWw7XddFfmyTNdcY7xHxbh2Ui8s', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (100, 'EXHyQxMSttcvLPwjENnXCPZ8GmLjJYHtNBnAkcFeFKMn', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (101, 'FhnLuJrRf5yiXeoJy4eMbb1b7DE7M6vahYnawcWbHiNG', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (102, 'CbYf9QNrkVgNRCMTDiVdvzMqSzXh8AAgnrKAoTfEACdh', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (103, 'DUgHCQYCA2RMNKv1cqFpSE6yzUhdL3y3bPApd5qnTjMu', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (104, '5bN4mUwVb3GTeahxahF9vCXoXmfFWgeYQs9WSLNyQaJG', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (105, '4XBqViD1XYF1qHrErrsXBzDrCapvP9fEFX4LPjXZi9YU', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (106, 'JDvBfej6DkbPYahFoLdrT8WHEPePdQ2phFAddT9tkxkV', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (107, '3A5df9U1n3wukRjDGBw4fBZgHbpZggd4mjdFBWFJXcG4', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (108, '6yUh6uJ7UpCGQXSXkrgQyFLDEcs61YXabVar34ia4p1L', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (109, '4cWUE7GxGvZM97GbFkEKX592zahEVWaTzYijfZSnb8f2', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (110, 'DfECv5JVrtUTvwNASRf9qnJjth9h3i2bZvk1iz7ZbjTB', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (111, '62qc2CNXwrYqQScmEdiZFFAnJR262PxWEuNQtxfafNgV', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (112, 'AtfwFfmzS5BQr5fe2cfSSm44XG1Ruqh9BvtXoXThGbd6', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (113, '5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (114, '6ephzaH4vB2D2MQaHLLgheuS6qvuVLevyXg61eXmiS2w', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (115, 'DjRuBGnxWAsFZJju6uNV923svmUEx2XEATAqLNF9fetY', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (116, 'BszFNvZR6gDG7dyUfkgCsRgDYSzxRrtmLxmknjmtan1f', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (117, 'kn8JGzU9avBfbewwHr4r35Z19REfd5yNfCQmc7Wgw4c', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (118, '6yFmWzcRThm1fqqQSeZgwYp1h3hizFE4cPiS8jNJTLbk', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (119, 'FezsQLZMxwCjy6dToxpXkg8cYu3ajN3ocsF95Pwd7WnH', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (120, 'F6e5hHFtxfVMAzaC7hyejDLtP87HGMn1LYCtuyQhptiE', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (121, 'HWPzMKQoyUv2CZKsyFNr6bHcGAZtAstzAPBjYA9EeFoX', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (122, '9K5YeQWBzYeGiwTYTSxNcEz683BpHwUi69QcRUom4JpY', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (123, 'HYezb3G6NstZVWX421js3teq9bKf6jPL6qb9NGG2bHcY', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (124, 'E75YyBQA6nKe98koystgbpsY3NJN2L2hp4ckfQ4xHoDC', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (125, 'DBHZjrkG5JFUNUpN4cxUziDT2kmsewMDjnzGrmgipnwN', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (126, 'CipXnHh2fDcMwtiF4tpvY4uRq9ETct3WDUNdnxqo6Q3v', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (127, 'BpMUBbJM5ubYkEPTMKd88K1FdcEcwkkrmTJ6ByGsfqQJ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (128, '7BspVMwLCh8RE3Smhkwf6aJeqMjdzBtAMcbj2vyAvP87', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (129, 'J2MYQ15QbTAmMrGcqbPgWaWsH9fgmzN8GBJ5SC7DzU5A', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (130, 'CDdmE5aKoeT6n2GFxvRwkg5xxX6338qCUdAeNfq3odvb', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (131, 'GpMZbSM2GgvTKHJirzeGfMFoaZ8UR2X7F4v8vHTvxFbL', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (132, '5sgXhG1c9VBceg6aVQguK3NnbPfHinERZj86As6zW5Be', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (133, 'CapuXNQoDviLvU1PxFiizLgPNQCxrsag1uMeyk6zLVps', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (134, 'CAPhoEse9xEH95XmdnJjYrZdNCA8xfUWdy3aWymHa1Vj', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (135, '7AhWSjMiXtxgZ6tB39V65sF3Rguv6arkbLWyk2v9MxRV', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (136, 'Fn68NZzCCgZKtYmnAYbkL6w5NNx3TgjW91dGkLA3hsDK', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (137, 'AHhiY6GAKfBkvseQDQbBC7qp3fTRNpyZccuEdYSdPFEf', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (138, 'EyNyMPNS4suQfwqPf5aXvZpM3Kve69S4V9YXMS5g9F2M', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (139, '7VtfL8fvgNfhz17qKRMjzQEXgbdpnHHHQRh54R9jP2RJ', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (140, 'GcgfsFFgd8vjCiavNSdEdzdMfeqXjvFNWBYFdZgWvrxR', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (141, 'AVmoTthdrX6tKt4nDjco2D775W2YK3sDhxPcMmzUAmTY', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00'),
+        (142, 'FrFfEG1KHafykhxntViKSeAst5XTrpFu3NdJKERMY7oN', '2025-04-21 08:04:23.373618 +00:00', '2025-04-21 08:04:23.373618 +00:00');
+
+insert into solana.token (id, version, mint, name, symbol, decimals, supply, metadata, description, image, website, creator_id, block_id, block_time, created_at, updated_at) values
+        (1000, 0, 'DuzAC1McEJnZKheGeLhhLoyAZfh1YDTf3NjsVuxnpump', 'TrolonMusk', 'TrolonMusk', 6, 999999939.391862000000, 'https://ipfs.io/ipfs/QmQgTJuP9vn9DbNMpfEkV9WySTHDdwq5bcuF5RXTwPceVy', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1001, 0, 'DMkqdhpBCWgeDarqj9cwGvLAaDjFzPNJXV9MDXJppump', 'ELONS TROLL FACE EMOJI', '🧌', 6, 999999851.086730000000, 'https://ipfs.io/ipfs/QmVz61cjNxZXvJverRLg4Ku5j2ous2TbDNaiXr3xktLsHM', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1002, 0, 'FtGiKzpCnUF6RzninAtCQA8rtNM9p8jMcNSV4qpJpump', 'First Alien', 'Popoy', 6, 1000000000.000000000000, 'https://ipfs.io/ipfs/QmV9S4JDsmCxePrEj6SqX5ixUNT1R9KYxkV7h2eKTGGTqk', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1003, 0, 'CBMpVd5L3bXLG47Hm3C8M1EneEoeE4JpJbTdMryeC2To', 'Fap', 'FAP', 6, 1000000000.000000000000, 'https://ipfs.io/ipfs/QmdevwWxGmQQLL6Y75Z64zqp8Gj4sfR96mPo8dJpMDyR45', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1004, 0, '2MXu5EPtWDjPWjvtBAG7pj8zbTtm1R7aJ3anWESMpump', 'FIRST Reddit AI Memecoin', 'RedditCoin', 6, 1000000000.000000000000, 'https://ipfs.io/ipfs/Qmaa2rvgpP2xktwj9Czoo6UXiv3v2kRXq1XGgDXHQXAmif', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1005, 0, '7LSsEoJGhLeZzGvDofTdNg7M3JttxQqGWNLo6vWMpump', 'Action Figure', 'Figure', 6, 999898097.211316000000, 'https://ipfs.io/ipfs/QmYHZ4ry1ouup7ixnmqrqGYN6uDygzyZFuJNvNrnSfRC67', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1006, 0, 'AiYvvEZWqhNSqVuxDdWHoPeMoTiB2BbMNF6Xj9ZApump', 'AI DO MY WORK', 'WORK', 6, 999918140.317146000000, 'https://ipfs.io/ipfs/QmTmyaYBfGvEVcqp2bJeunguL1ZZ27vrU16U3yQCGAAQVY', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1007, 0, '5UUH9RTDiSpq6HKS6bp4NdU9PNJpXRXuiw6ShBTBhgH2', 'TROLL', 'TROLL', 6, 999011770.754453000000, 'https://ipfs.io/ipfs/QmSEFmDCYb7Asro2VirBVjecp253iNnGwjgVZHdHxm9Rm5', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1008, 0, 'FYx7p823N7oW2se3rWyE3kwAg2xArP7KSWUaW22Npump', 'Retardrawification', 'RETARDIFY', 6, 999999885.748612000000, 'https://ipfs.io/ipfs/QmUqtFBrWjiSem5ppx6vyRzz6YrmNPezikdRiLtALZ6Eo5', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1009, 0, 'CxjQDk81zNTS3EPvwYcDegXrxmuGauGCLdXUEbHopump', 'CLITTY COIN', 'CLITTY', 6, 1000000000.000000000000, 'https://ipfs.io/ipfs/QmPdmYN7DZFtdJ2xKdohQhu6XNXmWHqz78TU9QjgPNpQEC', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1010, 0, 'A8JBhB6t8ktie5FcX2wqieQfQFJ34JyPZYvGVE3Ypump', 'God''s Country', 'COUNTRY', 6, 999378380.493126000000, 'https://ipfs.io/ipfs/QmT4MH29Pic73GsimmzcQTr9jm4vqJMzcmnwqqQRZ2RYKd', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1011, 0, 'D38VLiA55ZDcQCrbqsZFq6gJ4JLxdYVoJFDvDGXipump', 'Origin Of Troll Face', 'RAPERODENT', 6, 999960379.180766000000, 'https://ipfs.io/ipfs/QmRGCuozeUzGXnw3MAi6DXCm4XaT6XNpHy3r8QQ6AexK6Q', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1012, 0, '5Tbtr8F1ijEoJMQU8eSQYrv59XrNWnc8tLPtDNxsiiNE', 'Woke = retarded', 'WOKE', 6, 1000000000.000000000000, 'https://ipfs.io/ipfs/QmWngND4TvRtLqDmHerJyZNxFPCJqR5MrQP3cFbWzdkGtB', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1013, 0, 'E4qzn7o7P5SR13Sd1X1JKiw6yBGXVPat6JNUuX7ypump', 'ethereum maxi', 'ethard', 6, 999667825.823032000000, 'https://ipfs.io/ipfs/Qmdiu1Fyv3nQm2zeRYpjThZZMTDd9g4nfpM4U3NXfz7Tm8', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1014, 0, '8HtHu1gQoTjhL7fGxdQs8xrKpsbvik6hw3putVyHpump', 'SQUIRTING', 'SQUIRT', 6, 999999898.123983000000, 'https://ipfs.io/ipfs/QmNzzK4R7acbdAGGPXThyezud8MUQnXf6pbSZeQ9fKaBss', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1015, 0, 'EmEviV7ymzPr9BPgcxwR1ExDsKmsdFBjwo5UiKtJpump', 'Webdriver Torso', 'Webd', 6, 999999457.156195000000, 'https://ipfs.io/ipfs/QmQfMZpBFFAs5XUF7WhdhfmEGGerrUG7Zh2XuinPf11bv1', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1016, 0, 'N1SLxhpzdBMgPVFxCMj8BZZEBBFXAXfqWssmV6Kpump', 'The OG Memecoin', 'MEM', 6, 998844572.832730000000, 'https://ipfs.io/ipfs/QmbUUi3wnhUTMjyWzC6TqdSpyYBK1ovRi2gEFU4PUUmLB6', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1017, 0, 'CmXr8rZyqxbFKv44kk1u8ixQM9mZnUf625k56p27pump', 'pee pee poo poo', 'pppp', 6, 999970846.089424000000, 'https://ipfs.io/ipfs/QmRAucR85nwX1nw9xcSGtq9w2dHT3PZmSiSjnsGSnmMXZK', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1018, 0, '33TrarPgobf25XQ34LshrCutMKsGoLAm6NsDhKUm5tmQ', 'VYNSEC VPN', 'VPN', 6, 999999999.996234000000, 'https://ipfs.io/ipfs/QmQxtc2w1bBXeQKEw2rydSGUGhaW6sbyhvAVvnsW9sH7AR', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1019, 0, '6CJySNvwKsNRYyRC8PseP6Noknc8ABDMhs7uwCSWJmaV', 'DOLPH McFIN', 'McFIN', 6, 1000000000.000000000000, 'https://ipfs.io/ipfs/QmeBFJV236pQDBdKGWKsgGDcMDCoGkj1LZ2wBtdsJXKKtK', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1020, 0, '8oosbx7jJrZxm5m4ThKhBpvwwG4QpoAe6i4GiG19pump', 'Wizard Gang', 'Wizard', 6, 999884854.584560000000, 'https://ipfs.io/ipfs/QmeKSxWg7JxHrS26gRaPsWevvJnZqWKjurmd4aTvAxiUXC', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1021, 0, '6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN', 'OFFICIAL TRUMP', 'TRUMP', 6, 999999436.079722000000, 'https://arweave.net/cSCP0h2n1crjeSWE9KF-XtLciJalDNFs7Vf-Sm0NNY0', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1022, 0, '5oVNBeEEQvYi1cX3ir8Dx5n1P7pdxydbGF2X4TxVusJm', 'Infinity', 'INF', 9, 489413.463741185000, 'https://bafkreigok7uw2i4ovxzjautejollex65pxj7ta5sf6sn6slvp6m5gdczp4.ipfs.nftstorage.link/', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1023, 0, '6AJcP7wuLwmRYLBNbi825wgguaPsWzPBEHcHndpRpump', 'Vine Coin', 'VINE', 6, 999983793.925992000000, 'https://ipfs.io/ipfs/QmYTnHwVqLHCYL1xrwGQLY8e1YHdXVMimkLuYeHZNNyUiX', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1024, 0, 'smdKf4WFjjMBVDDY5t6ZMJ1WdnT3QLX8SdRwZf8qXhR', 'Solana Meme Distributor', 'SMD', 9, 879862085.821788805000, 'https://bronze-worldwide-shrimp-682.mypinata.cloud/ipfs/bafkreianq6r6jktuyjkn6ky73jkxsicfjypxamc5k4e6szdspkg5j5yn5a', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1025, 0, '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R', 'Raydium', 'RAY', 6, 554998979.035157000000, '', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1026, 0, '4LLbsb5ReP3yEtYzmXewyGjcir5uXtKFURtaEUVC2AHs', 'Parcl', 'PRCL', 6, 999998564.707009000000, 'https://obliged-coffee-cuckoo.myfilebase.com/ipfs/QmYQNxsnYFwGsFKtRxxXK5gMniuiqeM9qYuE3ttsCXS6Xs', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1027, 0, 'EsP4kJfKUDLfX274WoBSiiEy74Sh4tZKUCDjfULHpump', 'FRIC', 'FRIC', 6, 999969517.850343000000, 'https://ipfs.io/ipfs/Qmb3QwKMLvfWWm1VCAK7rDuQDZT2nmaoYYQTJJJhXVMUDt', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1028, 0, '3feHUxMyemRx2oUx1xW1vs1wJ2VpX99XrS3nXnLESi8K', 'World Liberty', 'WLFI', 6, 100000000000.000000000000, 'https://ipfs.io/ipfs/QmantYdVZtqpGwjWbhyUuzmRHDDe3PHsuehHLkZ4sE1eBM', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1029, 0, 'cYnatGyzida4TNyp6ZGDCtTKXXNvBB9Xub7PRtBRaqp', 'Swastika Coin', '卐', 6, 100000000000.000000000000, 'https://ipfs.io/ipfs/Qmaov5HkuM6GZT1zc6neP3ctiDBRSPrTe7zjQMxdSRgyER', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1030, 0, '1u8xthaEiJvA4Zr6Bkyf5tS1Yz4dnDzBMtvUzwJdBRP', 'OFFICIAL TRUMP', 'TRUMP', 6, 100000000000.000000000000, 'https://ipfs.io/ipfs/QmURxqM69Hmh2twZbAkZt7dcnncD9EC5PA88kofLNUYCna', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1031, 0, 'E6rLsVzbjzPdrtN8SX4LQWMGz6dtLR4QYVgy9yog7pBi', null, null, 6, 4329.535009000000, null, null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1032, 0, 'FZN7QZ8ZUUAxMPfxYEYkH3cXUASzH8EqA6B4tyCL8f1j', null, null, 9, 218714.971519693000, null, null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1033, 0, 'he1iusmfkpAdwvxLNGV8Y1iSbj4rUy6yMhEA3fotn9A', 'Helius Staked SOL', 'hSOL', 9, 564040.982351714000, 'https://raw.githubusercontent.com/igneous-labs/lst-offchain-metadata/master/hSOL/hSOL.json', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1034, 0, '4mMQ74nhnD5b8EeAbZBNoiXwE44gRRUaxK6Xr1QjGDG1', null, null, 9, 145.166677742000, null, null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1035, 0, '9kvTPjemayUL7XKPyjhqavbcLtY5VP2ha1G5vPuppump', 'fitcoin', 'fitcoin', 6, 999781615.153367000000, 'https://ipfs.io/ipfs/QmbzmA3yxPCHfE16sLfkuyVB7nDu53nNdghwKKhkLoEFrs', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1036, 0, 'EUQWUtULYzx1kAJiWqZjLJm2GcYixSvvPEoEmk2bpump', 'Large Group of Retards', 'GAGGLE', 6, 999978122.168358000000, 'https://ipfs.io/ipfs/QmRXRacYfL2bEFjvqfvBkw3XVqK64TXt6fGvAJkMc3swzr', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1037, 0, 'GEJJkUe2MDSsRg64iJBdKSRdsuo6V4kdUzrgyPogpump', 'Blueberry The Squirrel', 'Blueberry', 6, 996411502.779088000000, 'https://ipfs.io/ipfs/Qma8Z5UvCq3rdaJigvnSxeL9ZXqN2SMfRYA5uJ13ENhFnf', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1038, 0, 'GpRPGRTSi3c8d5guijerpge7eEJvawva3gFguRXKpump', 'Reverse Reality Rot', 'RRR', 6, 999820797.776675000000, 'https://ipfs.io/ipfs/Qmdweh5qsWqVwQeT3rKYTkH7KbgSeFAXxmMqSbEaQnWCDQ', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1039, 0, '5Uw9BAA5v34ffPXo7QupiXBBmsARxeDLEi4QVf6Lpump', 'wizards, trolls, farts', 'wtf', 6, 999976200.885155000000, 'https://ipfs.io/ipfs/QmVY24yuJcPjf3sd5fw7X12DwBhCUatFEqGDbuqgtMx7XB', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1040, 0, '526d8UxmsTQJKN9bbsZsjaYShzRMnPBPQuniBnC1K3Ao', 'derpcoin', 'derp', 6, 990796654.955747000000, 'https://ipfs.io/ipfs/QmXkEkPERdKdsSpWB1DdWY8vKYbnwyYVYcJhzBW7F3Cyw2', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1041, 0, '88KKUzT9B5sHRopVgRNn3VEfKh7g4ykLXqqjPT7Hpump', 'Hamster With Biggest Balls', 'Okintama', 6, 999960608.273959000000, 'https://ipfs.io/ipfs/QmWN6MnJz1WJMqh7hzzHbm57TwpDKsAJPUpmBc3xPz2vs3', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1042, 0, '3mSyvNaJrV7912we42p2Pq6EzvojtczULPPfqekSpump', 'Crazy Cattle 3D', 'CATTLE', 6, 999982854.802104000000, 'https://ipfs.io/ipfs/QmUqnUBbG6hD3od7SxDd7mZGhtLwowRt5Qg6TUgbK6A9vG', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00'),
+        (1043, 0, '7e1zigq4YpSRt7fPxkvwSEPfzHon2atfkB4Zscampump', 'Mount Rushmore', 'MR', 6, 999980111.408391000000, 'https://ipfs.io/ipfs/QmevWwi1ePhNSUeudrMVBtShePwe3dXDPFzFictjKDqG76', null, null, null, null, null, null, '2025-04-21 07:26:12.725150 +00:00', '2025-04-21 07:26:12.725150 +00:00');
+
+insert into solana.token_pair (id, base_id, quote_id)
+values  (1000, 1000, 1),
+        (1001, 1001, 1),
+        (1002, 1002, 1),
+        (1003, 1003, 1),
+        (1004, 1004, 1),
+        (1005, 1005, 1),
+        (1006, 1006, 1),
+        (1007, 1007, 1),
+        (1008, 1008, 1),
+        (1009, 1009, 1),
+        (1010, 1010, 1),
+        (1011, 1011, 1),
+        (1012, 1012, 1),
+        (1013, 1013, 1),
+        (1014, 1014, 1),
+        (1015, 1015, 1),
+        (1016, 1016, 1),
+        (1017, 1017, 1),
+        (1018, 1018, 1),
+        (1019, 1019, 1),
+        (1020, 1020, 1),
+        (1021, 4, 1),
+        (1022, 4, 3),
+        (1023, 1021, 3),
+        (1024, 1021, 1),
+        (1025, 1022, 3),
+        (1026, 1023, 3),
+        (1027, 1023, 1),
+        (1028, 1024, 1),
+        (1029, 1025, 1),
+        (1030, 1026, 3),
+        (1031, 1027, 1),
+        (1032, 1028, 1),
+        (1033, 1029, 1),
+        (1034, 1030, 1);
+
+insert into pumpswap.pool (id, token_pair_id, inverted, creator_id, slot, timestamp, created_at) values
+		(32, 1005, false, 33, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (34, 1006, false, 35, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (36, 1007, false, 37, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (38, 1008, false, 39, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (40, 1009, false, 41, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (42, 1010, false, 43, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (44, 1011, false, 45, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (46, 1012, true, 47, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (48, 1013, false, 49, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (50, 1014, false, 51, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (52, 1015, false, 53, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (54, 1016, false, 55, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (56, 1017, false, 57, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (58, 1018, false, 59, null, null, '2025-04-21 11:40:33.314255 +00:00'),
+        (60, 1019, false, 61, null, null, '2025-04-21 11:40:33.314255 +00:00');
+
+        "#,
+		)
+			.await
+			.unwrap();
+
+		tx.commit().await.unwrap();
+
+		let state = setup(pool.clone());
+		index_block(state, block).await;
+
+		// 33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21
+        assert_sql!(&pool, "(select token_pair_id from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = 1012");
+        assert_sql!(&pool, "(select pool_id from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = 46");
+        assert_sql!(&pool, "(select address_id from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = 19");
+        assert_sql!(&pool, "(select slot from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = 334886841");
+        assert_sql!(&pool, "(select amount_base from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = '19707.489586000000'");
+        assert_sql!(&pool, "(select amount_quote from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = '0.223056460000'");
+        assert_sql!(&pool, "(select price from pumpswap.swap where signature = '33A5kXAch95GPcA8bMoFery5mwWeubpSUYuE6zU2m9cYMxyb4SvCzruabXpi7aZCUCpbnFu5MSGfsMb196URCg21' ) = '0.000011318360'");
+
+	})
+		.await
+}

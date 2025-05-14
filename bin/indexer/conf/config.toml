@@ -1,0 +1,22 @@
+[tokio]
+threads = '$TOKIO_THREADS'
+
+[rayon]
+threads = '$RAYON_THREADS'
+
+[blockstream]
+url = '$BLOCKSTREAM_RPC_URL'
+concurrency = '$BLOCKSTREAM_CONCURRENCY'
+
+[slotstream]
+url = '$SLOTSTREAM_WS_URL'
+delay = '$SLOTSTREAM_DELAY'
+
+[rpc]
+url = '$RPC_URL'
+
+[postgres]
+connection_string = '$POSTGRES_CONNECTION_STRING'
+pool_min = '$POSTGRES_POOL_MIN'
+pool_max = '$POSTGRES_POOL_MAX'
+timeout_acquire_ms = '$POSTGRES_TIMEOUT_ACQUIRE_MS'
